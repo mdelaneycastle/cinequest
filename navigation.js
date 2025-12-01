@@ -126,7 +126,7 @@ function updateNavigationButtons() {
         nextBtn.disabled = false;
         nextBtn.style.opacity = '1';
         nextBtn.style.cursor = 'pointer';
-    } else if (currentDateStr === '2024-12-01') {
+    } else if (currentDateStr === '2025-12-01') {
         prevBtn.disabled = false;
         prevBtn.style.opacity = '1';
         prevBtn.style.cursor = 'pointer';
@@ -151,7 +151,7 @@ function goToPreviousDay() {
     const day = String(currentDate.getDate()).padStart(2, '0');
     const currentDateStr = `${year}-${month}-${day}`;
     
-    if (currentDateStr === '2024-12-01') {
+    if (currentDateStr === '2025-12-01') {
         window.location.href = `?date=2024-11-30`;
     }
 }
@@ -163,7 +163,7 @@ function goToNextDay() {
     const currentDateStr = `${year}-${month}-${day}`;
     
     if (currentDateStr === '2024-11-30') {
-        window.location.href = `?date=2024-12-01`;
+        window.location.href = `?date=2025-12-01`;
     }
 }
 
@@ -179,7 +179,7 @@ function updateRecentChallenges() {
     
     const availableDates = [
         new Date('2024-11-30'),
-        new Date('2024-12-01')
+        new Date('2025-12-01')
     ];
     
     const today = new Date();

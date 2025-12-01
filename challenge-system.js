@@ -149,7 +149,7 @@ function getChallengeForDate(date) {
     
     if (dateStr === '2024-11-30') {
         return challenges[0];
-    } else if (dateStr === '2024-12-01') {
+    } else if (dateStr === '2025-12-01') {
         return challenges[15];
     } else {
         return null;
