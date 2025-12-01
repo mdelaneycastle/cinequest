@@ -1,8 +1,17 @@
 const { createClient } = supabase;
-const supabaseClient = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
+const supabaseClient = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY, {
+    auth: {
+        lock: {
+            ifAvailable: true
+        }
+    }
+});
 
 async function initializeDatabase() {
     try {
+        // Clear browser storage to prevent space issues
+        await clearBrowserStorage();
+        
         const { data, error } = await supabaseClient
             .from('users')
             .select('*')
@@ -40,6 +49,42 @@ async function initializeDatabase() {
     }
 }
 
+async function clearBrowserStorage() {
+    try {
+        // Clear old cache data to prevent storage space issues
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map(cacheName => caches.delete(cacheName))
+            );
+        }
+        
+        // Clear old local storage entries
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.startsWith('sb-') || key.includes('supabase'))) {
+                const item = localStorage.getItem(key);
+                try {
+                    const parsedItem = JSON.parse(item);
+                    if (parsedItem.expires_at && Date.now() > parsedItem.expires_at * 1000) {
+                        keysToRemove.push(key);
+                    }
+                } catch (e) {
+                    // If parsing fails, consider the item expired
+                    keysToRemove.push(key);
+                }
+            }
+        }
+        
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        console.log('Browser storage cleaned');
+        
+    } catch (err) {
+        console.log('Storage cleanup failed:', err);
+    }
+}
+
 async function saveUserToSupabase(user) {
     if (!user) return;
     
@@ -60,8 +105,9 @@ async function saveUserToSupabase(user) {
         
         if (error) {
             console.error('Error saving user:', error);
-        } else {
+        } else if (data) {
             user.dbId = data.id;
+            console.log('User saved successfully to database');
         }
     } catch (err) {
         console.error('Failed to save user:', err);
@@ -69,7 +115,10 @@ async function saveUserToSupabase(user) {
 }
 
 async function saveDailyScore(completed, timeTaken, moves) {
-    if (!currentUser || !currentUser.dbId) return;
+    if (!currentUser || !currentUser.dbId) {
+        console.log('Cannot save score: user not authenticated or database ID missing');
+        return;
+    }
     
     const today = new Date().toISOString().split('T')[0];
     const challengeId = getDailyChallengeId();
@@ -86,10 +135,18 @@ async function saveDailyScore(completed, timeTaken, moves) {
                 moves: moves
             }, {
                 onConflict: 'user_id,challenge_date'
-            });
+            })
+            .select();
         
         if (error) {
             console.error('Error saving score:', error);
+        } else {
+            console.log('Score saved successfully:', data);
+            gameState.todayResult = {
+                completed,
+                time_taken: timeTaken,
+                moves
+            };
         }
     } catch (err) {
         console.error('Failed to save score:', err);

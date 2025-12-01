@@ -1,6 +1,6 @@
 let currentUser = null;
 
-function handleCredentialResponse(response) {
+async function handleCredentialResponse(response) {
     const responsePayload = decodeJwtResponse(response.credential);
     
     currentUser = {
@@ -15,8 +15,8 @@ function handleCredentialResponse(response) {
     document.getElementById('googleSignIn').style.display = 'none';
     document.getElementById('streakDisplay').classList.remove('hidden');
     
-    saveUserToSupabase(currentUser);
-    loadUserStats();
+    await saveUserToSupabase(currentUser);
+    await loadUserStats();
 }
 
 function decodeJwtResponse(token) {
