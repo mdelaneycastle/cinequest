@@ -129,7 +129,7 @@ function showTargetCard() {
 
 function startShuffling() {
     monteGameState.isShuffling = true;
-    const shuffleSpeed = 600 - (monteGameState.difficulty * 70);
+    const shuffleSpeed = 700 - (monteGameState.difficulty * 80);
     const numberOfShuffles = 5 + (monteGameState.difficulty * 2);
     
     let shufflesDone = 0;
@@ -152,52 +152,79 @@ function startShuffling() {
 }
 
 function swapCards(idx1, idx2) {
-    const cards = document.querySelectorAll('.card');
-    const card1 = cards[idx1];
-    const card2 = cards[idx2];
-    
-    if (!card1 || !card2 || idx1 === idx2) {
-        console.log('Invalid swap attempt:', idx1, idx2);
+    if (idx1 === idx2) {
+        console.log('Same card swap attempt, skipping');
         return;
     }
     
+    // Swap the data first
     const temp = monteGameState.cards[idx1];
     monteGameState.cards[idx1] = monteGameState.cards[idx2];
     monteGameState.cards[idx2] = temp;
     
+    // Get fresh references to the DOM elements
+    const cards = document.querySelectorAll('.card');
+    const card1 = cards[idx1];
+    const card2 = cards[idx2];
+    
+    if (!card1 || !card2) {
+        console.log('Card elements not found, re-rendering');
+        renderCards();
+        return;
+    }
+    
+    // Clear any existing transitions
+    card1.style.transition = 'none';
+    card2.style.transition = 'none';
+    card1.style.transform = '';
+    card2.style.transform = '';
+    
+    // Force reflow
+    card1.offsetHeight;
+    card2.offsetHeight;
+    
+    // Calculate positions
     const container = document.getElementById('cardsContainer');
     const containerRect = container.getBoundingClientRect();
     const card1Rect = card1.getBoundingClientRect();
     const card2Rect = card2.getBoundingClientRect();
     
-    const card1Left = card1Rect.left - containerRect.left;
-    const card2Left = card2Rect.left - containerRect.left;
-    const distance = card2Left - card1Left;
+    const distance = (card2Rect.left - containerRect.left) - (card1Rect.left - containerRect.left);
     
-    if (Math.abs(distance) < 10) {
-        console.log('Distance too small, skipping animation');
+    if (Math.abs(distance) < 20) {
+        console.log(`Distance too small (${distance}px), just re-rendering`);
         renderCards();
         return;
     }
     
-    card1.style.transform = `translateX(${distance}px)`;
-    card2.style.transform = `translateX(${-distance}px)`;
-    card1.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-    card2.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-    card1.style.zIndex = '10';
-    card2.style.zIndex = '10';
-    
     console.log(`Swapping cards ${idx1} and ${idx2}, distance: ${distance}px`);
     
+    // Set up animation
+    card1.style.transition = 'transform 0.6s ease-in-out';
+    card2.style.transition = 'transform 0.6s ease-in-out';
+    card1.style.zIndex = '20';
+    card2.style.zIndex = '20';
+    
+    // Start animation
+    requestAnimationFrame(() => {
+        card1.style.transform = `translateX(${distance}px)`;
+        card2.style.transform = `translateX(${-distance}px)`;
+    });
+    
+    // Clean up after animation
     setTimeout(() => {
-        card1.style.transform = '';
-        card2.style.transform = '';
-        card1.style.transition = '';
-        card2.style.transition = '';
-        card1.style.zIndex = '';
-        card2.style.zIndex = '';
+        if (card1 && card1.parentNode) {
+            card1.style.transform = '';
+            card1.style.transition = '';
+            card1.style.zIndex = '';
+        }
+        if (card2 && card2.parentNode) {
+            card2.style.transform = '';
+            card2.style.transition = '';
+            card2.style.zIndex = '';
+        }
         renderCards();
-    }, 500);
+    }, 600);
 }
 
 function selectCard(index) {
