@@ -207,11 +207,11 @@ function shareResult() {
     const moves = document.getElementById('finalMoves').textContent;
     const challengeNum = getDailyChallengeId();
     
-    const shareText = `CineQuest #${challengeNum} ${emoji}\n` +
+    const shareText = `ScreenStreak #${challengeNum} ${emoji}\n` +
         `⏱️ Time: ${time}\n` +
         `🎬 Moves: ${moves}\n` +
         `🔥 Streak: ${document.getElementById('streakCount').textContent} days\n\n` +
-        `Play at: https://cinequest.app`;
+        `Play at: https://screenstreak.app`;
     
     if (navigator.share) {
         navigator.share({
