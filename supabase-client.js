@@ -1,11 +1,5 @@
 const { createClient } = supabase;
-const supabaseClient = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY, {
-    auth: {
-        lock: {
-            ifAvailable: true
-        }
-    }
-});
+const supabaseClient = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
 
 async function initializeDatabase() {
     try {
