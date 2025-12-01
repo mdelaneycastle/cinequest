@@ -1,0 +1,453 @@
+:root {
+    --primary-color: #1a1a2e;
+    --secondary-color: #16213e;
+    --accent-color: #e94560;
+    --success-color: #4caf50;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --water-color: rgba(52, 152, 219, 0.7);
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, var(--accent-color), #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#userDisplay {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#userName {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.sign-out-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.sign-out-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.challenge-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.challenge-header h2 {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.challenge-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 1rem;
+}
+
+.movie-title {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.challenge-number {
+    color: var(--text-secondary);
+}
+
+.game-container {
+    background: var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.game-intro {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.game-intro h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.movie-quote {
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.instructions {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.start-btn, .retry-btn {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.start-btn:hover, .retry-btn:hover {
+    background: #d63851;
+    transform: translateY(-2px);
+}
+
+.start-btn.completed {
+    background: var(--success-color);
+    cursor: default;
+}
+
+.start-btn.completed:hover {
+    background: var(--success-color);
+    transform: none;
+}
+
+.start-btn.attempted {
+    background: #666;
+    cursor: default;
+}
+
+.start-btn.attempted:hover {
+    background: #666;
+    transform: none;
+}
+
+.game-area {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.timer-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.timer {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.moves {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.jugs-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin: 40px 0;
+}
+
+.jug-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.jug {
+    width: 120px;
+    height: 180px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0 0 10px 10px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.jug-3 {
+    height: 140px;
+    width: 100px;
+}
+
+.jug:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.water-level {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, var(--water-color) 0%, rgba(41, 128, 185, 0.9) 100%);
+    border-radius: 0 0 7px 7px;
+    transition: height 0.5s ease;
+    animation: waterWave 2s ease-in-out infinite;
+}
+
+@keyframes waterWave {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+}
+
+.jug-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+}
+
+.current-amount {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    z-index: 10;
+}
+
+.jug-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--accent-color);
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.target-display {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.target-box {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    background: rgba(233, 69, 96, 0.1);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    font-size: 1.2rem;
+    gap: 10px;
+}
+
+.hint-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.game-result {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.game-result h3 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+#resultTitle.success {
+    color: var(--success-color);
+}
+
+#resultTitle.failure {
+    color: var(--accent-color);
+}
+
+#resultMessage {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.stat-item span:last-child {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.share-container {
+    margin-top: 20px;
+}
+
+.share-btn {
+    padding: 12px 30px;
+    background: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.share-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+.streak-display {
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
+
+#streakCount {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .jugs-container {
+        gap: 30px;
+    }
+    
+    .jug {
+        width: 100px;
+        height: 150px;
+    }
+    
+    .jug-3 {
+        height: 120px;
+        width: 85px;
+    }
+    
+    .game-container {
+        padding: 20px;
+    }
+    
+    .jug-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-btn {
+        padding: 10px 8px;
+        font-size: 0.8rem;
+    }
+}

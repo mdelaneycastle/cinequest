@@ -1,0 +1,43 @@
+# Environment variables
+.env
+.env.local
+
+# Google OAuth credentials
+client_secret*.json
+credentials.json
+token.json
+
+# Supabase config
+supabase-config.js
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/

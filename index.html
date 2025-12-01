@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineQuest - Daily Movie Challenge</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">CineQuest</h1>
+            <div class="user-info">
+                <div id="userDisplay" class="hidden">
+                    <span id="userName"></span>
+                    <button id="signOutBtn" class="sign-out-btn">Sign Out</button>
+                </div>
+                <div id="googleSignIn"></div>
+            </div>
+        </header>
+
+        <main>
+            <div class="challenge-header">
+                <h2>Today's Challenge</h2>
+                <div class="challenge-info">
+                    <span class="movie-title">Die Hard with a Vengeance (1995)</span>
+                    <span class="challenge-number">Challenge #1</span>
+                </div>
+            </div>
+
+            <div class="game-container" id="gameContainer">
+                <div class="game-intro" id="gameIntro">
+                    <h3>The Water Jug Problem</h3>
+                    <p class="movie-quote">"On the fountain are two jugs. Do you see them? A 5-gallon and a 3-gallon. Fill one jug with exactly 4 gallons of water and place it on the scale, and the timer will stop."</p>
+                    <p class="instructions">Use the 3-gallon and 5-gallon jugs to measure exactly 4 gallons. Click on jugs to fill, empty, or pour between them.</p>
+                    <button class="start-btn" id="startGameBtn">Start Challenge</button>
+                </div>
+
+                <div class="game-area hidden" id="gameArea">
+                    <div class="timer-container">
+                        <div class="timer" id="timer">5:00</div>
+                        <div class="moves">Moves: <span id="moveCount">0</span></div>
+                    </div>
+
+                    <div class="jugs-container">
+                        <div class="jug-wrapper">
+                            <div class="jug jug-3" id="jug3">
+                                <div class="water-level" id="water3"></div>
+                                <span class="jug-label">3 Gallons</span>
+                                <span class="current-amount" id="amount3">0/3</span>
+                            </div>
+                            <div class="jug-actions">
+                                <button class="action-btn" onclick="fillJug(3)">Fill</button>
+                                <button class="action-btn" onclick="emptyJug(3)">Empty</button>
+                                <button class="action-btn" onclick="pourJug(3, 5)">Pour to 5G</button>
+                            </div>
+                        </div>
+
+                        <div class="jug-wrapper">
+                            <div class="jug jug-5" id="jug5">
+                                <div class="water-level" id="water5"></div>
+                                <span class="jug-label">5 Gallons</span>
+                                <span class="current-amount" id="amount5">0/5</span>
+                            </div>
+                            <div class="jug-actions">
+                                <button class="action-btn" onclick="fillJug(5)">Fill</button>
+                                <button class="action-btn" onclick="emptyJug(5)">Empty</button>
+                                <button class="action-btn" onclick="pourJug(5, 3)">Pour to 3G</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="target-display">
+                        <div class="target-box">
+                            <span>Target: 4 Gallons</span>
+                            <span class="hint-text">Get exactly 4 gallons in either jug!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-result hidden" id="gameResult">
+                    <h3 id="resultTitle"></h3>
+                    <p id="resultMessage"></p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Time:</span>
+                            <span id="finalTime"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Moves:</span>
+                            <span id="finalMoves"></span>
+                        </div>
+                    </div>
+                    <button class="retry-btn" onclick="resetGame()">Try Again</button>
+                    <div class="share-container">
+                        <button class="share-btn" onclick="shareResult()">Share Result</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>New challenge every day at midnight UTC</p>
+            <div class="streak-display hidden" id="streakDisplay">
+                Current Streak: <span id="streakCount">0</span> days
+            </div>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="game.js"></script>
+    <script src="supabase-client.js"></script>
+</body>
+</html>
