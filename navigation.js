@@ -110,7 +110,10 @@ function updateDateDisplay() {
 }
 
 function updateNavigationButtons() {
-    const currentDateStr = currentDate.toISOString().split('T')[0];
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const currentDateStr = `${year}-${month}-${day}`;
     
     const prevBtn = document.getElementById('prevChallenge');
     const nextBtn = document.getElementById('nextChallenge');
@@ -143,7 +146,10 @@ function updateNavigationButtons() {
 }
 
 function goToPreviousDay() {
-    const currentDateStr = currentDate.toISOString().split('T')[0];
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const currentDateStr = `${year}-${month}-${day}`;
     
     if (currentDateStr === '2024-12-01') {
         window.location.href = `?date=2024-11-30`;
@@ -151,7 +157,10 @@ function goToPreviousDay() {
 }
 
 function goToNextDay() {
-    const currentDateStr = currentDate.toISOString().split('T')[0];
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const currentDateStr = `${year}-${month}-${day}`;
     
     if (currentDateStr === '2024-11-30') {
         window.location.href = `?date=2024-12-01`;
@@ -180,7 +189,10 @@ function updateRecentChallenges() {
         if (date <= today) {
             const challenge = getChallengeForDate(date);
             if (challenge) {
-                const dateStr = date.toISOString().split('T')[0];
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const dateStr = `${year}-${month}-${day}`;
                 const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
                 
                 const link = document.createElement('a');
@@ -195,7 +207,11 @@ function updateRecentChallenges() {
 }
 
 function checkIfAlreadyPlayedDate(date) {
-    const dateKey = `screenstreak_${date.toISOString().split('T')[0]}`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    const dateKey = `screenstreak_${dateStr}`;
     const played = localStorage.getItem(dateKey);
     
     if (played) {

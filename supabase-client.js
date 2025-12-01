@@ -114,7 +114,11 @@ async function saveDailyScore(completed, timeTaken, moves) {
         return;
     }
     
-    const today = new Date().toISOString().split('T')[0];
+    const todayDate = new Date();
+    const year = todayDate.getFullYear();
+    const month = String(todayDate.getMonth() + 1).padStart(2, '0');
+    const day = String(todayDate.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
     const challengeId = getDailyChallengeId();
     
     try {
@@ -199,7 +203,11 @@ function calculateStreak(scores) {
 }
 
 function checkTodayAttempt(scores) {
-    const today = new Date().toISOString().split('T')[0];
+    const todayDate = new Date();
+    const year = todayDate.getFullYear();
+    const month = String(todayDate.getMonth() + 1).padStart(2, '0');
+    const day = String(todayDate.getDate()).padStart(2, '0');
+    const today = `${year}-${month}-${day}`;
     const todayScore = scores.find(s => s.challenge_date === today);
     
     if (todayScore) {

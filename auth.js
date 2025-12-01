@@ -10,13 +10,32 @@ async function handleCredentialResponse(response) {
         sub: responsePayload.sub
     };
     
-    document.getElementById('userName').textContent = currentUser.name;
-    document.getElementById('userDisplay').classList.remove('hidden');
-    document.getElementById('googleSignIn').style.display = 'none';
-    document.getElementById('streakDisplay').classList.remove('hidden');
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    updateUIForLoggedInUser();
     
     await saveUserToSupabase(currentUser);
     await loadUserStats();
+}
+
+function updateUIForLoggedInUser() {
+    if (currentUser) {
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('userDisplay').classList.remove('hidden');
+        document.getElementById('googleSignIn').style.display = 'none';
+        document.getElementById('streakDisplay').classList.remove('hidden');
+    }
+}
+
+function restoreUserSession() {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        updateUIForLoggedInUser();
+        loadUserStats();
+        return true;
+    }
+    return false;
 }
 
 function decodeJwtResponse(token) {
@@ -32,6 +51,7 @@ function decodeJwtResponse(token) {
 document.getElementById('signOutBtn')?.addEventListener('click', () => {
     google.accounts.id.disableAutoSelect();
     currentUser = null;
+    localStorage.removeItem('currentUser');
     
     document.getElementById('userDisplay').classList.add('hidden');
     document.getElementById('googleSignIn').style.display = 'block';
@@ -41,25 +61,27 @@ document.getElementById('signOutBtn')?.addEventListener('click', () => {
 });
 
 window.onload = function() {
-    google.accounts.id.initialize({
-        client_id: config.GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: false
-    });
-    
-    google.accounts.id.renderButton(
-        document.getElementById('googleSignIn'),
-        { 
-            theme: 'filled_black',
-            size: 'large',
-            type: 'standard',
-            text: 'continue_with',
-            shape: 'rectangular',
-            logo_alignment: 'left',
-            width: 250
-        }
-    );
-    
-    google.accounts.id.prompt();
+    if (!restoreUserSession()) {
+        google.accounts.id.initialize({
+            client_id: config.GOOGLE_CLIENT_ID,
+            callback: handleCredentialResponse,
+            auto_select: true,
+            cancel_on_tap_outside: false
+        });
+        
+        google.accounts.id.renderButton(
+            document.getElementById('googleSignIn'),
+            { 
+                theme: 'filled_black',
+                size: 'large',
+                type: 'standard',
+                text: 'continue_with',
+                shape: 'rectangular',
+                logo_alignment: 'left',
+                width: 250
+            }
+        );
+        
+        google.accounts.id.prompt();
+    }
 };
