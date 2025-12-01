@@ -108,25 +108,50 @@ async function saveUserToSupabase(user) {
     }
 }
 
-async function saveDailyScore(completed, timeTaken, moves) {
+async function saveDailyScore(completed, timeTaken, moves, challengeDate = null) {
     if (!currentUser || !currentUser.dbId) {
         console.log('Cannot save score: user not authenticated or database ID missing');
         return;
     }
     
-    const todayDate = new Date();
-    const year = todayDate.getFullYear();
-    const month = String(todayDate.getMonth() + 1).padStart(2, '0');
-    const day = String(todayDate.getDate()).padStart(2, '0');
-    const today = `${year}-${month}-${day}`;
-    const challengeId = getDailyChallengeId();
+    // Use provided challengeDate or fall back to current date from navigation
+    let dateToUse = challengeDate;
+    if (!dateToUse) {
+        // Try to get current challenge date from navigation.js
+        if (typeof getCurrentChallengeDate === 'function') {
+            dateToUse = getCurrentChallengeDate();
+        } else {
+            // Fallback: get from URL or use today
+            const urlParams = new URLSearchParams(window.location.search);
+            const dateParam = urlParams.get('date');
+            if (dateParam) {
+                dateToUse = new Date(dateParam + 'T00:00:00');
+            } else {
+                dateToUse = new Date();
+            }
+        }
+    }
+    
+    const year = dateToUse.getFullYear();
+    const month = String(dateToUse.getMonth() + 1).padStart(2, '0');
+    const day = String(dateToUse.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    
+    // Get challenge ID for the specific date
+    const challenge = getChallengeForDate(dateToUse);
+    const challengeId = challenge ? challenge.id : null;
+    
+    if (!challengeId) {
+        console.error('Cannot save score: no challenge found for date', dateStr);
+        return;
+    }
     
     try {
         const { data, error } = await supabaseClient
             .from('daily_scores')
             .upsert({
                 user_id: currentUser.dbId,
-                challenge_date: today,
+                challenge_date: dateStr,
                 challenge_id: challengeId,
                 completed: completed,
                 time_taken: timeTaken,
@@ -140,20 +165,40 @@ async function saveDailyScore(completed, timeTaken, moves) {
             console.error('Error saving score:', error);
         } else {
             console.log('Score saved successfully:', data);
-            gameState.todayResult = {
-                completed,
-                time_taken: timeTaken,
-                moves
-            };
+            
+            // Update game state if this is the current challenge
+            if (gameState) {
+                gameState.todayResult = {
+                    completed,
+                    time_taken: timeTaken,
+                    moves
+                };
+            }
+            
+            if (monteGameState) {
+                monteGameState.todayResult = {
+                    completed,
+                    time_taken: timeTaken,
+                    moves
+                };
+            }
             
             // Also save to localStorage for immediate UI updates
-            const localStorageKey = `screenstreak_${today}`;
+            const localStorageKey = `screenstreak_${dateStr}`;
             localStorage.setItem(localStorageKey, JSON.stringify({
                 completed,
                 time_taken: timeTaken,
                 moves,
-                challenge_date: today
+                challenge_date: dateStr
             }));
+            
+            // Refresh the UI to show completion status after a short delay
+            // to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof checkIfAlreadyPlayedDate === 'function') {
+                    checkIfAlreadyPlayedDate(dateToUse);
+                }
+            }, 100);
         }
     } catch (err) {
         console.error('Failed to save score:', err);
@@ -184,6 +229,15 @@ async function loadUserStats() {
             
             calculateStreak(data);
             checkTodayAttempt(data);
+            
+            // Refresh completion status for current challenge after syncing from database
+            // This ensures past challenges show their completion status after login
+            if (typeof getCurrentChallengeDate === 'function' && typeof checkIfAlreadyPlayedDate === 'function') {
+                setTimeout(() => {
+                    const currentChallengeDate = getCurrentChallengeDate();
+                    checkIfAlreadyPlayedDate(currentChallengeDate);
+                }, 100);
+            }
         }
     } catch (err) {
         console.error('Failed to load user stats:', err);

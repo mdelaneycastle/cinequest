@@ -1,6 +1,11 @@
 let currentDate = new Date();
 let isViewingPast = false;
 
+// Make currentDate accessible globally for game completion tracking
+function getCurrentChallengeDate() {
+    return currentDate;
+}
+
 function initializeNavigation() {
     const urlParams = new URLSearchParams(window.location.search);
     const dateParam = urlParams.get('date');
