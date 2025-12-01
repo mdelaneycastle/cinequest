@@ -125,7 +125,7 @@ function showTargetCard() {
 
 function startShuffling() {
     monteGameState.isShuffling = true;
-    const shuffleSpeed = 440 - (monteGameState.difficulty * 55);
+    const shuffleSpeed = 500 - (monteGameState.difficulty * 60);
     const numberOfShuffles = 5 + (monteGameState.difficulty * 2);
     
     let shufflesDone = 0;
@@ -156,12 +156,26 @@ function swapCards(idx1, idx2) {
     monteGameState.cards[idx1] = monteGameState.cards[idx2];
     monteGameState.cards[idx2] = temp;
     
-    card1.style.animation = 'slideRight 0.33s ease-in-out';
-    card2.style.animation = 'slideLeft 0.33s ease-in-out';
+    const card1Rect = card1.getBoundingClientRect();
+    const card2Rect = card2.getBoundingClientRect();
+    const distance = card2Rect.left - card1Rect.left;
+    
+    card1.style.transform = `translateX(${distance}px)`;
+    card2.style.transform = `translateX(${-distance}px)`;
+    card1.style.transition = 'transform 0.4s ease-in-out';
+    card2.style.transition = 'transform 0.4s ease-in-out';
+    card1.style.zIndex = '10';
+    card2.style.zIndex = '10';
     
     setTimeout(() => {
+        card1.style.transform = '';
+        card2.style.transform = '';
+        card1.style.transition = '';
+        card2.style.transition = '';
+        card1.style.zIndex = '';
+        card2.style.zIndex = '';
         renderCards();
-    }, 330);
+    }, 400);
 }
 
 function selectCard(index) {
