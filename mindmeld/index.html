@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind Meld - Online Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Mind Meld</h1>
+            <p class="subtitle">Connect minds, one word at a time</p>
+        </header>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen active">
+            <div class="card">
+                <h2>Ready to Meld Minds?</h2>
+                <p>Create a room or join your friend's game</p>
+                <div class="button-group">
+                    <button id="createRoomBtn" class="btn btn-primary">Create Room</button>
+                    <button id="joinRoomBtn" class="btn btn-secondary">Join Room</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create/Join Room Screen -->
+        <div id="roomScreen" class="screen">
+            <div class="card">
+                <h2 id="roomTitle">Room Setup</h2>
+                <div id="createRoomSection" class="hidden">
+                    <p>Share this code with your friend:</p>
+                    <div class="room-code-display">
+                        <span id="roomCode" class="code-text"></span>
+                        <button id="copyCodeBtn" class="btn btn-small">Copy</button>
+                    </div>
+                    <div class="waiting-message">
+                        <div class="spinner"></div>
+                        <p>Waiting for player to join...</p>
+                    </div>
+                </div>
+                <div id="joinRoomSection" class="hidden">
+                    <p>Enter the room code:</p>
+                    <input type="text" id="roomCodeInput" class="code-input" maxlength="5" placeholder="XXXXX">
+                    <button id="joinBtn" class="btn btn-primary">Join Game</button>
+                </div>
+                <button id="backBtn" class="btn btn-link">← Back</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <div class="room-info">
+                    <span>Room: <strong id="currentRoomCode"></strong></span>
+                    <span id="connectionStatus" class="status">●</span>
+                </div>
+                <button id="leaveGameBtn" class="btn btn-small btn-danger">Leave Game</button>
+            </div>
+
+            <div class="game-area">
+                <!-- Game State Display -->
+                <div id="gameState" class="game-state">
+                    <div id="waitingForPlayers" class="state-message hidden">
+                        <p>Waiting for both players to be ready...</p>
+                    </div>
+                    
+                    <div id="initialWords" class="state-message hidden">
+                        <p>Think of any word to start!</p>
+                    </div>
+
+                    <div id="convergingWords" class="state-message hidden">
+                        <p>Find a word that connects these two:</p>
+                        <div class="word-display">
+                            <div class="word-card player1">
+                                <span class="player-label">Player 1</span>
+                                <span class="word" id="player1Word"></span>
+                            </div>
+                            <div class="word-card player2">
+                                <span class="player-label">Player 2</span>
+                                <span class="word" id="player2Word"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mindMeldSuccess" class="state-message hidden">
+                        <div class="celebration">
+                            <h2>🎉 MIND MELD! 🎉</h2>
+                            <p>You both thought of:</p>
+                            <div class="meld-word" id="meldWord"></div>
+                            <button id="playAgainBtn" class="btn btn-primary">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Input -->
+                <div id="wordInputSection" class="word-input-section">
+                    <input type="text" id="wordInput" class="word-input" placeholder="Enter your word..." maxlength="30">
+                    <button id="submitWordBtn" class="btn btn-primary">Submit Word</button>
+                </div>
+
+                <!-- Waiting for Other Player -->
+                <div id="waitingForOther" class="waiting-indicator hidden">
+                    <div class="spinner"></div>
+                    <p>Waiting for other player...</p>
+                </div>
+
+                <!-- Game History -->
+                <div class="history-section">
+                    <h3>Round History</h3>
+                    <div id="gameHistory" class="history-list">
+                        <!-- History items will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error/Info Messages -->
+        <div id="messageToast" class="toast hidden">
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="game.js"></script>
+</body>
+</html>
