@@ -3,104 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mind Meld - Neural Link</title>
+    <title>Mind Meld - Word Association</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Inter:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-
+    <div class="paper-texture"></div>
+    
     <div class="container">
         <header>
-            <div class="logo-glitch" data-text="🧠 Mind Meld">🧠 Mind Meld</div>
-            <p class="subtitle">ESTABLISH NEURAL LINK // SYNC MINDS</p>
+            <div class="brand-badge">EST. 2025</div>
+            <h1>Mind Meld.</h1>
+            <p class="subtitle">A game of linguistic convergence.</p>
         </header>
 
         <div id="startScreen" class="screen active">
-            <div class="card glass-panel">
-                <div class="scanner-line"></div>
-                <h2><span class="highlight">SYSTEM READY</span></h2>
-                <p>Initialize connection protocol to begin synchronization.</p>
+            <div class="card book-page">
+                <div class="chapter-header">
+                    <span>CHAPTER I</span>
+                    <hr>
+                </div>
+                <h2>The Beginning</h2>
+                <p class="story-text">Two minds enter. One word emerges. Establish a connection to begin the experiment.</p>
+                
                 <div class="button-group">
-                    <button id="createRoomBtn" class="btn btn-primary cyber-btn">
-                        <span class="btn-content">Create Nexus</span>
-                        <span class="glitch-effect"></span>
-                    </button>
-                    <button id="joinRoomBtn" class="btn btn-secondary cyber-btn">
-                        <span class="btn-content">Join Nexus</span>
-                    </button>
+                    <button id="createRoomBtn" class="btn btn-primary">Create Study Group</button>
+                    <button id="joinRoomBtn" class="btn btn-outline">Join Existing</button>
                 </div>
             </div>
         </div>
 
         <div id="roomScreen" class="screen">
-            <div class="card glass-panel">
-                <h2 id="roomTitle">NEURAL SETUP</h2>
+            <div class="card book-page">
+                <h2 id="roomTitle" class="serif-title">Configuration</h2>
+                
                 <div id="createRoomSection" class="hidden">
-                    <p>TRANSMIT THIS FREQUENCY:</p>
+                    <p class="instruction">Share this reference code:</p>
                     <div class="room-code-display">
-                        <span id="roomCode" class="code-text glitch-text"></span>
-                        <button id="copyCodeBtn" class="btn btn-icon">📋</button>
+                        <span id="roomCode" class="code-text typewriter"></span>
+                        <button id="copyCodeBtn" class="btn-icon" title="Copy to Clipboard">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.242a2 2 0 0 0-.602-1.43L16.083 2.57A2 2 0 0 0 14.685 2H10a2 2 0 0 0-2 2z"/><path d="M16 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2"/></svg>
+                        </button>
                     </div>
                     <div class="waiting-message">
-                        <div class="loader-ring"></div>
-                        <p class="blink-text">AWAITING CONNECTION...</p>
+                        <div class="typing-indicator">
+                            <span>.</span><span>.</span><span>.</span>
+                        </div>
+                        <p class="italic-muted">Waiting for collaborator...</p>
                     </div>
                 </div>
+
                 <div id="joinRoomSection" class="hidden">
-                    <p>INPUT FREQUENCY CODE:</p>
-                    <input type="text" id="roomCodeInput" class="code-input cyber-input" maxlength="5" placeholder="_ _ _ _ _">
-                    <button id="joinBtn" class="btn btn-primary cyber-btn" style="margin-top: 20px;">INITIATE LINK</button>
+                    <p class="instruction">Enter reference code:</p>
+                    <input type="text" id="roomCodeInput" class="code-input typewriter" maxlength="5" placeholder="X X X X X">
+                    <button id="joinBtn" class="btn btn-primary full-width">Connect</button>
                 </div>
-                <button id="backBtn" class="btn btn-link">← ABORT</button>
+                
+                <button id="backBtn" class="btn btn-link">← Return to Index</button>
             </div>
         </div>
 
         <div id="gameScreen" class="screen">
-            <div class="game-header glass-panel mini">
+            <div class="game-header">
                 <div class="room-info">
-                    <span class="label">FREQ:</span> <strong id="currentRoomCode" class="neon-text"></strong>
-                    <span id="connectionStatus" class="status-dot"></span>
+                    <span class="label">REF:</span> <strong id="currentRoomCode" class="mono-badge"></strong>
+                    <span id="connectionStatus" class="status-indicator" title="Connected"></span>
                 </div>
-                <button id="leaveGameBtn" class="btn btn-small btn-danger">DISCONNECT</button>
+                <button id="leaveGameBtn" class="btn btn-small btn-text">Resign</button>
             </div>
 
             <div class="game-area">
                 <div id="gameState" class="game-state">
                     <div id="waitingForPlayers" class="state-message hidden">
-                        <div class="loader-bars"></div>
-                        <p>SYNCHRONIZING NEURAL NETWORKS...</p>
+                        <p class="serif-large">Awaiting participants...</p>
                     </div>
                     
                     <div id="initialWords" class="state-message hidden">
-                        <h3 class="pulse-text">INITIATE SEQUENCE</h3>
-                        <p>Input seed word to begin.</p>
+                        <h3 class="serif-title">Round 1</h3>
+                        <p>Provide an initial seed word.</p>
                     </div>
 
                     <div id="convergingWords" class="state-message hidden">
-                        <p class="system-msg">>> ANALYSIS COMPLETE. CONVERGE MINDS.</p>
+                        <p class="instruction">Find the common thread:</p>
                         <div class="word-display">
-                            <div class="word-card player1">
-                                <span class="player-label">NEURAL NODE A</span>
-                                <span class="word" id="player1Word"></span>
+                            <div class="word-card">
+                                <span class="player-label">PARTICIPANT A</span>
+                                <span class="word serif-word" id="player1Word"></span>
                             </div>
-                            <div class="link-line"></div>
-                            <div class="word-card player2">
-                                <span class="player-label">NEURAL NODE B</span>
-                                <span class="word" id="player2Word"></span>
+                            <div class="connector">&</div>
+                            <div class="word-card">
+                                <span class="player-label">PARTICIPANT B</span>
+                                <span class="word serif-word" id="player2Word"></span>
                             </div>
                         </div>
                     </div>
 
                     <div id="mindMeldSuccess" class="state-message hidden">
                         <div class="celebration">
-                            <h2 class="mega-glitch">⚠️ SYNC 100% ⚠️</h2>
-                            <p>NEURAL PATHWAYS UNIFIED</p>
-                            <div class="meld-word" id="meldWord"></div>
-                            <button id="playAgainBtn" class="btn btn-primary cyber-btn">RE-INITIALIZE</button>
+                            <div class="stamp-container">
+                                <div class="stamp-circle">
+                                    <div class="stamp-text">CONVERGENCE</div>
+                                </div>
+                            </div>
+                            <h2 class="serif-title">Meld Achieved.</h2>
+                            <p>The shared thought is:</p>
+                            <div class="meld-word typewriter" id="meldWord"></div>
+                            <button id="playAgainBtn" class="btn btn-primary">Start New Chapter</button>
                         </div>
                     </div>
                 </div>
@@ -111,20 +121,21 @@
                             <span id="timerSeconds">10</span>
                         </div>
                     </div>
-                    <div class="input-wrapper">
-                        <input type="text" id="wordInput" class="word-input cyber-input" placeholder="INPUT DATA..." maxlength="30">
-                        <div class="input-border"></div>
+                    <div class="input-group">
+                        <input type="text" id="wordInput" class="word-input typewriter" placeholder="Type your word here..." maxlength="30">
+                        <button id="submitWordBtn" class="btn btn-primary submit-arrow">→</button>
                     </div>
-                    <button id="submitWordBtn" class="btn btn-primary cyber-btn">UPLOAD</button>
                 </div>
 
                 <div id="waitingForOther" class="waiting-indicator hidden">
-                    <div class="hex-spinner"></div>
-                    <p class="blink-text">AWAITING EXTERNAL DATA...</p>
+                    <div class="typing-indicator">
+                        <span>.</span><span>.</span><span>.</span>
+                    </div>
+                    <p class="italic-muted">Partner is thinking...</p>
                 </div>
 
-                <div class="history-section glass-panel">
-                    <h3>DATA LOG</h3>
+                <div class="history-section">
+                    <h3>Appendix (History)</h3>
                     <div id="gameHistory" class="history-list">
                         </div>
                 </div>
