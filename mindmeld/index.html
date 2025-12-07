@@ -3,82 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mind Meld - Online Game</title>
+    <title>Mind Meld - Neural Link</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
     <div class="container">
         <header>
-            <h1>🧠 Mind Meld</h1>
-            <p class="subtitle">Connect minds, one word at a time</p>
+            <div class="logo-glitch" data-text="🧠 Mind Meld">🧠 Mind Meld</div>
+            <p class="subtitle">ESTABLISH NEURAL LINK // SYNC MINDS</p>
         </header>
 
-        <!-- Start Screen -->
         <div id="startScreen" class="screen active">
-            <div class="card">
-                <h2>Ready to Meld Minds?</h2>
-                <p>Create a room or join your friend's game</p>
+            <div class="card glass-panel">
+                <div class="scanner-line"></div>
+                <h2><span class="highlight">SYSTEM READY</span></h2>
+                <p>Initialize connection protocol to begin synchronization.</p>
                 <div class="button-group">
-                    <button id="createRoomBtn" class="btn btn-primary">Create Room</button>
-                    <button id="joinRoomBtn" class="btn btn-secondary">Join Room</button>
+                    <button id="createRoomBtn" class="btn btn-primary cyber-btn">
+                        <span class="btn-content">Create Nexus</span>
+                        <span class="glitch-effect"></span>
+                    </button>
+                    <button id="joinRoomBtn" class="btn btn-secondary cyber-btn">
+                        <span class="btn-content">Join Nexus</span>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Create/Join Room Screen -->
         <div id="roomScreen" class="screen">
-            <div class="card">
-                <h2 id="roomTitle">Room Setup</h2>
+            <div class="card glass-panel">
+                <h2 id="roomTitle">NEURAL SETUP</h2>
                 <div id="createRoomSection" class="hidden">
-                    <p>Share this code with your friend:</p>
+                    <p>TRANSMIT THIS FREQUENCY:</p>
                     <div class="room-code-display">
-                        <span id="roomCode" class="code-text"></span>
-                        <button id="copyCodeBtn" class="btn btn-small">Copy</button>
+                        <span id="roomCode" class="code-text glitch-text"></span>
+                        <button id="copyCodeBtn" class="btn btn-icon">📋</button>
                     </div>
                     <div class="waiting-message">
-                        <div class="spinner"></div>
-                        <p>Waiting for player to join...</p>
+                        <div class="loader-ring"></div>
+                        <p class="blink-text">AWAITING CONNECTION...</p>
                     </div>
                 </div>
                 <div id="joinRoomSection" class="hidden">
-                    <p>Enter the room code:</p>
-                    <input type="text" id="roomCodeInput" class="code-input" maxlength="5" placeholder="XXXXX">
-                    <button id="joinBtn" class="btn btn-primary">Join Game</button>
+                    <p>INPUT FREQUENCY CODE:</p>
+                    <input type="text" id="roomCodeInput" class="code-input cyber-input" maxlength="5" placeholder="_ _ _ _ _">
+                    <button id="joinBtn" class="btn btn-primary cyber-btn" style="margin-top: 20px;">INITIATE LINK</button>
                 </div>
-                <button id="backBtn" class="btn btn-link">← Back</button>
+                <button id="backBtn" class="btn btn-link">← ABORT</button>
             </div>
         </div>
 
-        <!-- Game Screen -->
         <div id="gameScreen" class="screen">
-            <div class="game-header">
+            <div class="game-header glass-panel mini">
                 <div class="room-info">
-                    <span>Room: <strong id="currentRoomCode"></strong></span>
-                    <span id="connectionStatus" class="status">●</span>
+                    <span class="label">FREQ:</span> <strong id="currentRoomCode" class="neon-text"></strong>
+                    <span id="connectionStatus" class="status-dot"></span>
                 </div>
-                <button id="leaveGameBtn" class="btn btn-small btn-danger">Leave Game</button>
+                <button id="leaveGameBtn" class="btn btn-small btn-danger">DISCONNECT</button>
             </div>
 
             <div class="game-area">
-                <!-- Game State Display -->
                 <div id="gameState" class="game-state">
                     <div id="waitingForPlayers" class="state-message hidden">
-                        <p>Waiting for both players to be ready...</p>
+                        <div class="loader-bars"></div>
+                        <p>SYNCHRONIZING NEURAL NETWORKS...</p>
                     </div>
                     
                     <div id="initialWords" class="state-message hidden">
-                        <p>Think of any word to start!</p>
+                        <h3 class="pulse-text">INITIATE SEQUENCE</h3>
+                        <p>Input seed word to begin.</p>
                     </div>
 
                     <div id="convergingWords" class="state-message hidden">
-                        <p>Find a word that connects these two:</p>
+                        <p class="system-msg">>> ANALYSIS COMPLETE. CONVERGE MINDS.</p>
                         <div class="word-display">
                             <div class="word-card player1">
-                                <span class="player-label">Player 1</span>
+                                <span class="player-label">NEURAL NODE A</span>
                                 <span class="word" id="player1Word"></span>
                             </div>
+                            <div class="link-line"></div>
                             <div class="word-card player2">
-                                <span class="player-label">Player 2</span>
+                                <span class="player-label">NEURAL NODE B</span>
                                 <span class="word" id="player2Word"></span>
                             </div>
                         </div>
@@ -86,42 +97,40 @@
 
                     <div id="mindMeldSuccess" class="state-message hidden">
                         <div class="celebration">
-                            <h2>🎉 MIND MELD! 🎉</h2>
-                            <p>You both thought of:</p>
+                            <h2 class="mega-glitch">⚠️ SYNC 100% ⚠️</h2>
+                            <p>NEURAL PATHWAYS UNIFIED</p>
                             <div class="meld-word" id="meldWord"></div>
-                            <button id="playAgainBtn" class="btn btn-primary">Play Again</button>
+                            <button id="playAgainBtn" class="btn btn-primary cyber-btn">RE-INITIALIZE</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Word Input -->
                 <div id="wordInputSection" class="word-input-section">
                     <div class="timer-container">
                         <div id="timerDisplay" class="timer-display hidden">
-                            <span id="timerSeconds">10</span>s
+                            <span id="timerSeconds">10</span>
                         </div>
                     </div>
-                    <input type="text" id="wordInput" class="word-input" placeholder="Enter your word..." maxlength="30">
-                    <button id="submitWordBtn" class="btn btn-primary">Submit Word</button>
-                </div>
-
-                <!-- Waiting for Other Player -->
-                <div id="waitingForOther" class="waiting-indicator hidden">
-                    <div class="spinner"></div>
-                    <p>Waiting for other player...</p>
-                </div>
-
-                <!-- Game History -->
-                <div class="history-section">
-                    <h3>Round History</h3>
-                    <div id="gameHistory" class="history-list">
-                        <!-- History items will be added here -->
+                    <div class="input-wrapper">
+                        <input type="text" id="wordInput" class="word-input cyber-input" placeholder="INPUT DATA..." maxlength="30">
+                        <div class="input-border"></div>
                     </div>
+                    <button id="submitWordBtn" class="btn btn-primary cyber-btn">UPLOAD</button>
+                </div>
+
+                <div id="waitingForOther" class="waiting-indicator hidden">
+                    <div class="hex-spinner"></div>
+                    <p class="blink-text">AWAITING EXTERNAL DATA...</p>
+                </div>
+
+                <div class="history-section glass-panel">
+                    <h3>DATA LOG</h3>
+                    <div id="gameHistory" class="history-list">
+                        </div>
                 </div>
             </div>
         </div>
 
-        <!-- Error/Info Messages -->
         <div id="messageToast" class="toast hidden">
             <span id="toastMessage"></span>
         </div>
