@@ -2,7 +2,7 @@ const SUPABASE_URL = 'https://yujkdidzecwtwpknuarz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl1amtkaWR6ZWN3dHdwa251YXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxMzAwNTksImV4cCI6MjA4MDcwNjA1OX0.BqLRmTljkqtzsZMBgIwtafgzgG8eH61BlkJi4tEuBa8';
 
 // Initialize Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Game state
 let gameState = {
@@ -108,7 +108,7 @@ async function createRoom() {
     
     try {
         // Create room in database
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('rooms')
             .insert([{
                 code: roomCode,
@@ -161,7 +161,7 @@ async function joinRoom() {
     
     try {
         // Check if room exists
-        const { data: room, error: fetchError } = await supabase
+        const { data: room, error: fetchError } = await supabaseClient
             .from('rooms')
             .select('*')
             .eq('code', roomCode)
@@ -178,7 +178,7 @@ async function joinRoom() {
         }
         
         // Join room as player 2
-        const { data, error: updateError } = await supabase
+        const { data, error: updateError } = await supabaseClient
             .from('rooms')
             .update({ 
                 player2_id: gameState.playerId,
@@ -207,7 +207,7 @@ async function joinRoom() {
 }
 
 function subscribeToRoom(roomCode) {
-    gameState.subscription = supabase
+    gameState.subscription = supabaseClient
         .channel(`room:${roomCode}`)
         .on(
             'postgres_changes',
@@ -359,7 +359,7 @@ async function submitWordToDatabase(word) {
         const otherField = gameState.playerNumber === 1 ? 'player2_word' : 'player1_word';
         
         // Get current room state
-        const { data: currentRoom, error: fetchError } = await supabase
+        const { data: currentRoom, error: fetchError } = await supabaseClient
             .from('rooms')
             .select('*')
             .eq('code', gameState.roomCode)
@@ -368,7 +368,7 @@ async function submitWordToDatabase(word) {
         if (fetchError) throw fetchError;
         
         // Update player's word
-        const { error: updateError } = await supabase
+        const { error: updateError } = await supabaseClient
             .from('rooms')
             .update({ [updateField]: word })
             .eq('code', gameState.roomCode);
@@ -435,7 +435,7 @@ function updateGameDisplay(room) {
 async function resetRound() {
     try {
         // Clear words for next round
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('rooms')
             .update({ 
                 player1_word: null,
@@ -483,7 +483,7 @@ function addToHistory(word1, word2, isMeld = false) {
 async function playAgain() {
     try {
         // Reset game
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from('rooms')
             .update({ 
                 player1_word: null,
@@ -513,13 +513,13 @@ async function leaveGame() {
     
     // If player 1 leaves, delete the room
     if (gameState.playerNumber === 1) {
-        await supabase
+        await supabaseClient
             .from('rooms')
             .delete()
             .eq('code', gameState.roomCode);
     } else {
         // Player 2 leaves, just remove from room
-        await supabase
+        await supabaseClient
             .from('rooms')
             .update({ player2_id: null, game_state: 'waiting' })
             .eq('code', gameState.roomCode);
